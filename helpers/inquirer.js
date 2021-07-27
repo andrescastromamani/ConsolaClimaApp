@@ -1,6 +1,6 @@
 var inquirer = require('inquirer');
 var colors = require('colors');
-//const Tarea = require('../models/tarea');
+
 
 const preguntas = [
     {
@@ -62,7 +62,7 @@ const leerInput = async (message) => {
     return desc
 }
 const listadoLugares = async (lugares = []) => {
-    const choices = lugares.map((lugar , i) => {
+    const choices = lugares.map((lugar, i) => {
         const index = `${i + 1}.`.green;
         return {
             value: lugar.id,
@@ -85,43 +85,9 @@ const listadoLugares = async (lugares = []) => {
     return id
 }
 
-const confirmar = async (message) => {
-    const question = [
-        {
-            type: 'confirm',
-            name: 'ok',
-            message: message,
-        }
-    ]
-    const { ok } = await inquirer.prompt(question);
-    return ok;
-}
-
-const listadoTareasChecklist = async (tareas = []) => {
-    const choices = tareas.map((tarea , i) => {
-        const index = `${i + 1}.`.green;
-        return {
-            value: tarea.id,
-            name: `${index} ${tarea.desc}`,
-            checked: (tarea.completadoEn) ? true : false
-        }
-    });
-    const question = [
-        {
-            type: 'checkbox',
-            name: 'ids',
-            message: '¿Seleccionar Tareas?',
-            choices: choices
-        }
-    ]
-    const { ids } = await inquirer.prompt(question);
-    return ids
-}
 module.exports = {
     inquirerMenu,
     pausa,
     leerInput,
     listadoLugares,
-    confirmar,
-    listadoTareasChecklist
 }

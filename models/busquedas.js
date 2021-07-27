@@ -5,7 +5,14 @@ class Busquedas {
     historial = []
     dbPath = './db/database.json'
     constructor() {
-        //leer DB si existe
+        this.leerDB()
+    }
+    get historialCapitalizado(){
+        return this.historial.map(ciudad =>{
+            let palabras = ciudad.split(' ')
+            palabras = palabras.map(p => p[0].toUpperCase() + p.slice(1))
+            return palabras.join(' ')
+        })
     }
     get paramsMapBox() {
         return {
@@ -60,8 +67,11 @@ class Busquedas {
     }
     agregarHistorial(ciudad = '') {
         //Prevenir duplicados
-        if (this.historial.includes(ciudad.toLowerCase())) return
-        this.historial.unshift(ciudad)
+        if (this.historial.includes(ciudad.toLowerCase())){
+            return
+        }
+        this.historial = this.historial.slice(0,9)
+        this.historial.unshift(ciudad.toLocaleLowerCase())
         //Guardar en DB
         this.guardarDB()
     }
@@ -70,6 +80,14 @@ class Busquedas {
             historial: this.historial
         }
         fs.writeFileSync(this.dbPath, JSON.stringify(payload))
+    }
+    leerDB(){
+        if (fs.existsSync(this.dbPath)) {
+            const info = fs.readFileSync(this.dbPath,{encode: 'utf-8'})
+            const data = JSON.parse(info)
+            this.historial = data.historial
+        }
+        return
     }
 }
 
